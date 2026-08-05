@@ -13,6 +13,6 @@ produtos[
     
     {"nome" : "Calca",
     "codigo" : "03",
-    "preco" : ".00",
+    "preco" : "75.00",
     "quantidade" : "10",
-    "categoria" : "Roupas",}]
+    "categoria" : "Roupas"},]
