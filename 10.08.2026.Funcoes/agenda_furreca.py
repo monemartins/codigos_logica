@@ -12,14 +12,26 @@ import os
 # Importa "random" para gerar números aleatórios
 import random
 
-# Banco de dados em memória (dict) (Moch)
-database = {}
+# Importa "JASON"
+import json
 
-#Função para salvar os dados excluídos
+# Função para salvar os dados excluídos
+
+
 def save_database():
     with open("database.json", "w", encoding="utf-8") as file:
         json.dump(database, file, indent=4, ensure_ascii=False)
-        
+
+
+def load_database():
+    global database
+    try:
+        with open("database.json", "r", encoding="utf-8") as file:
+            database = json.load(file)
+    except FileNotFoundError:
+        database = dict()
+
+
 def cls():
     # Limpa a tela
     if os.name == "nt":
@@ -63,6 +75,8 @@ def new_contact():
 
     # Salva o novo cadastro no formato "dict"
     database[key] = dict(name=name, contact=contact)
+
+    save_database()
 
     # Confirmação
     print(f"\nUsuário com ID {key} adicionado!")
@@ -127,10 +141,12 @@ def edit_contact():
         contact = input(" • Contato: ")
         if contact.strip() != "":
             break
-        print("-----", "Digite um contato válido!", "-----")    
+        print("-----", "Digite um contato válido!", "-----")
 
     # Atualizar
-    database[key] = dict(name = name, contact = contact)
+    database[key] = dict(name=name, contact=contact)
+
+    save_database()
 
     print()
     print("Contato atualizado!")
@@ -158,6 +174,9 @@ def delete_contact():
     option = input("Tem certeza que deseja apagar [S/N]? ")
     if option.upper() == "S":
         del database[key]
+
+        save_database()
+
         print("Contato apagado!")
     else:
         print()
@@ -213,6 +232,8 @@ Opções:
                 # Se escolheu uma opção inválida, chama o menu novamente, mas, com a mensagem de erro.
                 error = "Digite uma opção válida!"
                 main(error)
+
+load_database()
 
 
 # "Roda" o programa
